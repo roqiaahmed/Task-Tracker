@@ -1,6 +1,7 @@
 package org.example;
 
 import java.util.Scanner;
+
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
@@ -15,11 +16,9 @@ public class Main {
                 case "add":
                     String description = input.split(" ", 2)[1];
 
-                    Task newTask =  new Task(description);
-                    TaskManager tasks = new TaskManager();
-                    tasks.addTask(newTask);
-                    tasks.readFile();
-                    System.out.println("Task added successfully (ID:" + newTask.getId() + ")");
+                    TaskManager taskM = new TaskManager();
+                    Task task = taskM.addTask(description);
+                    System.out.println("Task added successfully (ID:" + task.getId() + ")");
                     input = scanner.nextLine();
                     break;
                 case "delate":

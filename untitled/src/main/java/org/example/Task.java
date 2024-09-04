@@ -1,5 +1,7 @@
 package org.example;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.time.*;
 
 
@@ -13,14 +15,16 @@ public class Task {
     public String toString() {
         return id +
                 "createdAt=" + createdAt +
-                ", description='" + description + '\'' +
-                ", state=" + state +
-                ", updatedAt=" + updatedAt +
-                '}';
+                " description='" + description + '\'' +
+                " state=" + state +
+                " updatedAt=" + updatedAt;
     }
 
     private Status state;
-    final LocalDateTime createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
+    final private LocalDateTime createdAt;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime updatedAt;
 
     public Task(String description) {
@@ -32,6 +36,10 @@ public class Task {
         this.updatedAt = LocalDateTime.now();
     }
 
+    public Task() {
+        this.id = count;
+        this.createdAt = LocalDateTime.now();
+    }
     public String getDescription() {
         return description;
     }
