@@ -23,9 +23,7 @@ public class TaskManager {
 
         if (tasksFile.exists() && tasksFile.length() != 0) {
             try {
-                System.out.println(" Tasks before are ===>" + allTasks);
                 allTasks = objectMapper.readValue(tasksFile, new TypeReference<List<Task>>(){});
-                System.out.println(" Tasks after are ===>" + allTasks);
             } catch (IOException e) {
                 e.printStackTrace();
 //                allTasks = new ArrayList<>();
@@ -61,5 +59,68 @@ public class TaskManager {
         saveTask();
 //        System.out.println("save in file");
         return newTask;
+    }
+
+    public Task getTaskById(int id) throws Exception{
+        readFile();
+        for(Task task:allTasks){
+            int taskId = task.getId();
+            if ( taskId == id){
+                return task;
+            }
+        }
+            return null;
+    }
+
+    public void updateTask(int taskId,String newDescription)throws Exception{
+        Task currTask = getTaskById(taskId);
+
+        if(!(currTask == null)){
+            currTask.setDescription(newDescription);
+            deleteTask(taskId);
+            allTasks.add(currTask);
+            saveTask();
+            System.out.println("updated successfully");
+        }else{
+        System.out.println("there is no task with this id");
+        }
+    }
+
+    public void deleteTask(int taskId)throws Exception{
+        System.out.println("in deleteTask method " + taskId);
+        Task currTask = getTaskById(taskId);
+        allTasks.remove(currTask);
+        saveTask();
+    }
+
+    public List<Task> listTasks(String args) throws Exception{
+        String [] inputs = args.split(" ");
+        readFile();
+        if(inputs.length == 2){
+            List<Task> stateTasks = new ArrayList<>();
+            String state = inputs[1];
+            for(Task task : allTasks){
+                if(task.getState().equals(state) ){
+                    stateTasks.add(task);
+                }
+            }
+            return stateTasks;
+        }
+        return allTasks;
+    }
+
+    public void updateTaskState(int taskId, String state) throws Exception{
+        readFile();
+        Task currTask = getTaskById(taskId);
+                Status newState = switch (state) {
+                    case "done" -> Status.done;
+                    case "in_progress" -> Status.in_progress;
+                    case "todo" -> Status.todo;
+                    default -> null;
+                };
+        currTask.setState(newState);
+        deleteTask(taskId);
+        allTasks.add(currTask);
+        saveTask();
     }
 }

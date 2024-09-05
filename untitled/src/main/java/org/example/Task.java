@@ -31,7 +31,7 @@ public class Task {
         count += 1;
         this.description = description;
         this.id = count;
-        this.state = Status.in_progress;
+        this.state = Status.todo;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
@@ -53,8 +53,8 @@ public class Task {
         return id;
     }
 
-    public Status getState() {
-        return state;
+    public String getState() {
+        return state.toString();
     }
 
     public void setState(Status state) {

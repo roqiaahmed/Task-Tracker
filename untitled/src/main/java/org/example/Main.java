@@ -1,5 +1,6 @@
 package org.example;
 
+import java.util.List;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -9,27 +10,46 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
 
         String input = scanner.nextLine();
-        String [] actions = input.split(" ");
         while(!"exit".equals(input)) {
-
+            int taskId;
+            String [] actions = input.split(" ");
+            TaskManager taskM = new TaskManager();
             switch (actions[0]){
                 case "add":
                     String description = input.split(" ", 2)[1];
-
-                    TaskManager taskM = new TaskManager();
                     Task task = taskM.addTask(description);
                     System.out.println("Task added successfully (ID:" + task.getId() + ")");
                     input = scanner.nextLine();
                     break;
                 case "delate":
-                    System.out.println("delate task");
+                    taskId = Integer.parseInt(input.split(" ", 2)[1]);
+                    taskM.deleteTask(taskId);
+                    System.out.println("deleted");
                     input = scanner.nextLine();
                     break;
                 case "update":
-                    System.out.println("update task");
+                    taskId = Integer.parseInt(input.split(" ", 3)[1]);
+                    System.out.println("taskId"+taskId);
+                    String newDescription = input.split(" ", 3)[2];
+                    System.out.println("des "+ newDescription);
+                    taskM.updateTask(taskId, newDescription);
                     input = scanner.nextLine();
                     break;
-
+                case "list":
+                    List<Task> tasks = taskM.listTasks(input);
+                    System.out.println(tasks);
+                    input = scanner.nextLine();
+                    break;
+                case "mark-in-progress":
+                    taskId = Integer.parseInt(input.split(" ", 2)[1]);
+                    taskM.updateTaskState(taskId,"in_progress");
+                    input = scanner.nextLine();
+                    break;
+                case "mark-done":
+                    taskId = Integer.parseInt(input.split(" ", 2)[1]);
+                    taskM.updateTaskState(taskId,"done");
+                    input = scanner.nextLine();
+                    break;
                 default:
                     input = scanner.nextLine();
             }
